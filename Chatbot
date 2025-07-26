@@ -1,0 +1,82 @@
+import re
+import datetime
+
+class AdvancedChatbot:
+    def __init__(self):
+        self.user_name = None
+        self.confirm_exit = False
+
+    def greet_user(self):
+        current_hour = datetime.datetime.now().hour
+        if current_hour < 12:
+            return "Good morning! I'm your smart chatbot. What's your name?"
+        elif current_hour < 18:
+            return "Good afternoon! I'm your smart chatbot. What's your name?"
+        else:
+            return "Good evening! I'm your smart chatbot. What's your name?"
+
+    def handle_input(self, user_input):
+        user_input = user_input.strip().lower()
+
+        # Exit confirmation block
+        if self.confirm_exit:
+            if "yes" in user_input:
+                return "Okay, goodbye! See you again.", True
+            elif "no" in user_input:
+                self.confirm_exit = False
+                return "Great! Let's continue our conversation.", False
+
+        # Name capture
+        name_match = re.search(r"\bmy name is (\w+)", user_input)
+        if name_match:
+            self.user_name = name_match.group(1).capitalize()
+            return f"Nice to meet you, {self.user_name}!", False
+
+        # Greetings
+        elif re.search(r"\b(hi|hello|hey)\b", user_input):
+            return "Hello! How can I assist you today?", False
+
+        # Asking bot's name
+        elif "your name" in user_input:
+            return "I'm a rule-based chatbot created in Python!", False
+
+        # Asking how the bot is
+        elif "how are you" in user_input:
+            if self.user_name:
+                return f"I'm doing well, {self.user_name}. How about you?", False
+            else:
+                return "I'm doing great! How about you?", False
+
+        # Mood responses
+        elif "i am sad" in user_input or "i am upset" in user_input or "i am angry" in user_input:
+            return "I'm sorry to hear that. Want to talk about it?", False
+        elif "i am happy" in user_input or "i am excited" in user_input:
+            return "That's awesome! I'm happy for you 😊", False
+
+        # Help or capability
+        elif "help" in user_input or "what can you do" in user_input:
+            return ("I can remember your name, talk about how you feel, greet you based on time, "
+                    "and respond to basic questions like this. Try asking me something!"), False
+
+        # Exit keyword
+        elif "bye" in user_input or "exit" in user_input or "quit" in user_input:
+            self.confirm_exit = True
+            return "Are you sure you want to exit? (yes/no)", False
+
+        # Default fallback
+        else:
+            return "Hmm... I didn't understand that. Try saying 'help' to know what I can do.", False
+
+    def chat(self):
+        print(self.greet_user())
+        while True:
+            user_input = input("You: ")
+            response, should_exit = self.handle_input(user_input)
+            print("Bot:", response)
+            if should_exit:
+                break
+
+# Run the chatbot
+if __name__ == "__main__":
+    bot = AdvancedChatbot()
+    bot.chat()
