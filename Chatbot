@@ -51,7 +51,7 @@ class AdvancedChatbot:
         elif "i am sad" in user_input or "i am upset" in user_input or "i am angry" in user_input:
             return "I'm sorry to hear that. Want to talk about it?", False
         elif "i am happy" in user_input or "i am excited" in user_input:
-            return "That's awesome! I'm happy for you 😊", False
+            return "That's awesome! I'm happy for you ", False
 
         # Help or capability
         elif "help" in user_input or "what can you do" in user_input:
